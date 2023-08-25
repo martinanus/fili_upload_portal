@@ -144,3 +144,18 @@ function hash_str(str_to_hash){
 
     return sum;
   }
+
+function makeFilesCopy(fileIds, destination){
+    for (var i = 0; i < fileIds.length; i++) {
+        copyFileToFolder(fileIds[i], destination);
+    }
+}
+
+function copyFileToFolder(fileId, folderId){
+    const file = DriveApp.getFileById(fileId);
+    const destination = DriveApp.getFolderById(folderId);
+    const copiedFile = file.makeCopy(destination);
+    console.log("File: " + copiedFile.getName() + " copied to: " + destination.getName());
+}
+
+

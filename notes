@@ -2,12 +2,6 @@ Pendientes:
 
 CREAR GIT
 
-actualizar contenido envío de mail a cliente
-	+ utm
-
-Resolver tema permisos to run dbt/mail/etc.
-	ok - emprolijar
-
 Carpeta POR factura
 
 Post-procesamiento de Datos:
@@ -20,6 +14,12 @@ si damos de alta historico
 		una vez hecho la carga historica, se borran cliente
 		+ pido alta por ellos
 
+
+actualizar contenido envío de mail a cliente
+	+ utm
+
+Resolver tema permisos to run dbt/mail/etc.
+	ok - emprolijar
 actualizar diagrama de flujo form
 
 
