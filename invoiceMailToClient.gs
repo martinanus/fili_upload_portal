@@ -89,7 +89,7 @@ function getEmailBody(customMailContent, clientName){
     let defaultBody = `Hola ${emoji_html}, <BR><BR>`
                 + `Le enviamos la nueva factura generada por ` + userName + ` <BR><BR>`
                 + `¡Muchas gracias! <BR><BR>`
-                + `El equipo de Fili.`;
+                + `El equipo de Iberogram.`;
 
 
     if (customMailContent){
