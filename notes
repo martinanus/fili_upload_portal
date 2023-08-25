@@ -1,0 +1,169 @@
+Pendientes:
+
+CREAR GIT
+
+actualizar contenido envío de mail a cliente
+	+ utm
+
+Resolver tema permisos to run dbt/mail/etc.
+	ok - emprolijar
+
+Carpeta POR factura
+
+Post-procesamiento de Datos:
+	Reordernar rptas sheet en varias tabs
+	Carga de documento en Drive - carpeta solicitada
+
+
+si damos de alta historico
+	no tenemos mail para envio de facturas
+		una vez hecho la carga historica, se borran cliente
+		+ pido alta por ellos
+
+actualizar diagrama de flujo form
+
+
+-------------------------------------------
+
+
+
+Dones by Mendi:
+
+Agregar categoria en invoice_group_1
+	invoice_group_2 (subcategoria)
+	invoice_group_3 (proyecto / CC)
+
+
+Ver validación de datos
+	Campos obligatorios
+		hacer obligatorio en form
+		hacer lista de pregs obligatorias
+	numericos
+	fechas
+	etc
+		MENDI
+
+Redactar mejor
+	las preguntas
+		hacer lista de cambios
+		carga de archivos (para que carpetas drive sean más facil de ubicar)
+			considerar categoria (pago/cobro)
+	archivos adjuntos
+		se puede setear para adjuntar + de 1 archivo (no hace falta zip)
+		SALVO para enviar factura
+	mensaje de finalización del form
+
+
+Subcategorías
+	separadas solo para factura proveedor
+	crear una sección por subcategoria con la preungta de indique subcategoria y las opciones según la categoria
+	No hacer la asociación lógica a partir de la preg de categoria.
+
+Escribir mails para clientes cuando se envía factura
+
+
+	vinculación secciones
+		ok
+
+---------------------------------------
+Solved:
+
+Documentación:
+	Hacer un diagrama de flujo de secciones en form
+	OK
+
+Carga de sueldos
+	el/los sueldo(s) está/n pago?
+		sacar Monto
+	OK
+
+
+Categoría y SubCategorías Fijas
+	Sueldos - Siempre honorarios
+	OK
+
+Proyecto tienen que poder agregar
+	ok
+
+Registro de pago de sueldos
+	Checkbox
+	OK
+
+
+Formatear
+	numeros dinámicos en opciones Facturas / Pagos
+		separación miles + 2 decimales
+			OK
+	fecha
+		dd/mm/yyyy
+			OK
+
+
+Mail:
+a Fili (siempre)
+	ok
+a contact_email del cliente cuando envío factura CC a Ibero+nos
+	contact_email
+		ok
+	attach
+		ok
+	CC Fili
+		ok
+	default TEXTO
+		ok
+	PERSONALIZAR TEXTO
+		ok
+
+		Vinculación Factura Pago
+		cargo factura de cliente (NO PUEDE TENER PAGO previo ASOCIADO)
+		cargo factura de proevedor - puede tener pago asociado
+		cargo pago de cliente - Puede tener factura asociada (ok)
+		cargo pago de provedor - Puede tener factura asociada (ok)
+
+
+		Proyecto (CC) - ir agregando las que haya
+		invoice_group_1
+		si no hay ningun - msj
+			Ok sin CC
+	listado proveedores
+		NO hace falta
+	listado clientes
+		Ver cuando CRM esté como tabla
+		Ok con CRM provisorio
+	listado Sueldos (a pagar)
+		ver que invoice_group se usan y que valor para Sueldos/Honorarios
+
+
+Falta impuesto con VEP
+	ok
+
+
+	Ver registro de movimiento manual + Alta de clientes
+		interfaz form
+		apps script
+
+
+		actualizar datasat
+		sandbox -> ibero
+			ok
+
+Trigger
+onSubmit
+	internal notif
+		ok
+
+
+listado clientes
+tomo "relation = Cliente" de la externa
+
+
+ver dbt alta de clientes
+	ok, no hace falta correr dbt porque la tabla es ext, se actualiza con sheet alconsultar
+
+
+	Trigger
+	para update de formulario /
+		after dbt
+		after Alta de Clientes
+			ok
+			via web app
