@@ -16,7 +16,9 @@ const taxesPayment = "PAGO DE IMPUESTOS - Adjuntá la documentación relativa al
 const taxesUpload = "CARGA IMPUESTOS - Adjuntá el VEP del impuesto"
 const pendingTaxesPayment = "PAGO IMPUESTOS - Adjuntá la documentación relativa al pago del impuesto"
 
-const selectFolderForProviderPayment = "¿En qué carpeta de Pagos de Drive querés cargar la factura? "
+const selectFolderForProviderPayment1 = "¿En qué carpeta de Pagos de Drive querés cargar la factura? "
+const selectFolderForProviderPayment2 = "¿En qué carpeta de Pagos de Drive querés cargar el pago? "
+
 
 
 function uploadAttachedFiles(){
@@ -38,7 +40,6 @@ function uploadAttachedFiles(){
                 destinationFolderId = searchFolderId("Cobranzas")
                 makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
                 break;
-            case providerPaymentNoInvoice:
             case providerPaymentWithInvoice:
                 destinationFolderId = searchFolderId("Pagos")
                 makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
@@ -57,10 +58,12 @@ function uploadAttachedFiles(){
                 break;
             case providerInvoice:
             case providerPayment:
+            case providerPaymentNoInvoice:
                 uploadProvider = true;
                 var providerFilesId = itemResponse.getResponse();
                 break;
-            case selectFolderForProviderPayment:
+            case selectFolderForProviderPayment1:
+            case selectFolderForProviderPayment2:
                 var paymentType = itemResponse.getResponse();
                 break;
         }
