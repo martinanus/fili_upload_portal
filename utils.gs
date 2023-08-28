@@ -129,7 +129,7 @@ function getFiliUrlWithUtm(client){
 
     console.log("UrlWithUtm: " + UrlWithUtm);
 
-    htmlText = `<BR><a href=${UrlWithUtm}><font size="-2">Enviado con Fili</font></a>`
+    var htmlText = `<BR><a href=${UrlWithUtm}><font size="-2">Enviado con Fili</font></a>`
 
     return htmlText
 }

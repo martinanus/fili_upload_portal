@@ -1,25 +1,15 @@
 Pendientes:
 
-CREAR GIT
+si la carpeta dentro de Pagos no existe
+	- no se pueden crear carpetas y moverlas donde uno quiere
+	- archivo queda tirado en pagos y hay que crear a mano
 
 Carpeta POR factura
 
 Post-procesamiento de Datos:
 	Reordernar rptas sheet en varias tabs
-	Carga de documento en Drive - carpeta solicitada
 
 
-si damos de alta historico
-	no tenemos mail para envio de facturas
-		una vez hecho la carga historica, se borran cliente
-		+ pido alta por ellos
-
-
-actualizar contenido envío de mail a cliente
-	+ utm
-
-Resolver tema permisos to run dbt/mail/etc.
-	ok - emprolijar
 actualizar diagrama de flujo form
 
 
@@ -167,3 +157,20 @@ ver dbt alta de clientes
 		after Alta de Clientes
 			ok
 			via web app
+
+Carga de documento en Drive - carpeta solicitada}
+	ok
+
+
+	si damos de alta historico
+	no tenemos mail para envio de facturas
+		una vez hecho la carga historica, se borran cliente
+		+ pido alta por ellos
+			ok
+
+
+actualizar contenido envío de mail a cliente
+	+ utm
+
+Resolver tema permisos to run dbt/mail/etc.
+	ok - emprolijar

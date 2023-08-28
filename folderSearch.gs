@@ -15,6 +15,10 @@ function searchFolderId(transactionType, paymentType){
 
     var paymentTypeFolder = findFolderInParentFolder(transactionTypeFolder, paymentType);
 
+    if (!paymentTypeFolder){
+        return transactionTypeFolder.getId();
+    }
+
     return paymentTypeFolder.getId();
 }
 

@@ -6,6 +6,7 @@ const providerPaymentWithInvoice = "COMPROBANTE PAGO A PROVEEDORES con factura -
 
 const clientInvoiceSend = "ENVÍO FACTURA - Adjuntá la factura a enviar"
 const clientInvoiceNoSend = "FACTURA CLIENTE (SIN ENVÍO) -  Adjuntá la factura"
+const clientPaymentPrevInvoice = "COMPROBANTE COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 const clientPayment = "COMPROBANTE COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 
 const pendingSalariesPayment = "COMPROBANTE PAGO SUELDOS/HONORARIOS - Adjuntá la documentación relativa al pago (comprobante, etc).\nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip)"
@@ -36,6 +37,7 @@ function uploadAttachedFiles(){
         switch(title){
             case clientInvoiceSend:
             case clientInvoiceNoSend:
+            case clientPaymentPrevInvoice:
             case clientPayment:
                 destinationFolderId = searchFolderId("Cobranzas")
                 makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
