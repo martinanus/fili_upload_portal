@@ -1,4 +1,4 @@
-rootFolderId = "1pKR8b7hV8wSrOzgLApJGZpd4H2bLBFpD"
+rootFolderId = "1Hum3p2nS_9tSIvr0NTfveSo8mtfckX0_"
 
 function searchFolderId(transactionType, paymentType){
     var rootFolder = DriveApp.getFolderById(rootFolderId)
@@ -9,17 +9,7 @@ function searchFolderId(transactionType, paymentType){
     var monthFolder = findFolderInParentFolder(rootFolder, currentDate);
     var transactionTypeFolder = findFolderInParentFolder(monthFolder, transactionType);
 
-    if (!paymentType){
-        return transactionTypeFolder.getId();
-    }
-
-    var paymentTypeFolder = findFolderInParentFolder(transactionTypeFolder, paymentType);
-
-    if (!paymentTypeFolder){
-        return transactionTypeFolder.getId();
-    }
-
-    return paymentTypeFolder.getId();
+    return transactionTypeFolder.getId();
 }
 
 function findFolderInParentFolder(parentFolder, searchedFolderName){

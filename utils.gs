@@ -42,13 +42,15 @@ function concatenateCols(rows){
         const cols = rows[i].f;
         let strOption = "";
         for (let j = 0; j < cols.length; j++) {
-            if (isDate(cols[j].v)){
-                cols[j].v = formatDate(cols[j].v)
-            } else if (Number(cols[j].v)){
-                cols[j].v = formatAmount(cols[j].v);
+            if (cols[j].v){
+                if (isDate(cols[j].v)){
+                    cols[j].v = formatDate(cols[j].v)
+                } else if (Number(cols[j].v)){
+                    cols[j].v = formatAmount(cols[j].v);
+                }
+                strOption += cols[j].v;
+                strOption += separator;
             }
-            strOption += cols[j].v;
-            strOption += separator;
         }
         strOption = strOption.substring(0, strOption.length - separator.length);
 

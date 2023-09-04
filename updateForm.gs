@@ -1,29 +1,30 @@
-const userName                         = "Iberogram"
+const userName                         = "SIP"
 const internalEmail                    = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"
 
 
 const bqProjectId                       = 'fili-377220';
-const bqDataset                         = 'iberogram'
+const bqDataset                         = 'sip'
 const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
-const formId                            = '19jt0Qa0s1vgk5byFLvaDFVfuMbmrAsdpsXxAH2jrtS0';
+const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc147y_ao6Q';
 
 const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente a la que vincular el cobro recibido";
 const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
 const uninvoicedOutcomePaymentQuestionTitle = "Seleccioná el pago al que se vincula la nueva factura cargada";
-const projectQuestionTitle              = "Marcá el Centro de Coste (CC) correspondiente";
 const clientsToSendQuestionTitle        = "Seleccioná el cliente del que proviene la factura que estás cargando";
+const clientPayerQuestionTitle          = "Seleccioná el cliente que realizó el pago"
 const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
 const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
-
-
+const providerToSendQuestionTitle       = "Seleccioná el proveedor al que enviarle el comprobante de pago"
+const providerInvoiceQuestionTitle      = "Seleccioná el proveedor del que proviene la factura que estás cargando"
+const providerPayerQuestionTitle        = "Seleccioná el proveedor al que se realizó el pago"
 
 
 const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
 const sendInvoiceChoice                 = 'Envío de factura a clientes'
 const invoiceAttachQuestionTitle        = 'ENVÍO FACTURA - Adjuntá la factura a enviar'
-const clientSelectionQuestionTitle      = 'Seleccioná el cliente al que enviarle la factura'
+const clientInvoicedQuestionTitle       = 'Seleccioná el cliente al que enviarle la factura'
 const customMailContentQuestionTitle    = ("En caso de querer modificar el contenido del mail que se enviará a tu cliente, "
                                         + "escribí acá el nuevo texto a incluir.\nEl mensaje por defecto, si se deja vacía esta "
                                         + "respuesta, se muestra acá.")
@@ -50,14 +51,23 @@ function updateForm() {
             case uninvoicedOutcomePaymentQuestionTitle:
                 setUninvoicedOutcomePaymentChoices(questions[i])
                 break;
-            case projectQuestionTitle:
-                setProjectQuestionTitleChoices(questions[i])
-                break;
             case clientsToSendQuestionTitle:
-                setClientsChoices(questions[i], clientsToSendQuestionTitle)
+                setClientChoices(questions[i], clientsToSendQuestionTitle)
                 break;
-            case clientSelectionQuestionTitle:
-                setClientsChoices(questions[i], clientSelectionQuestionTitle)
+            case clientPayerQuestionTitle:
+                setClientChoices(questions[i], clientPayerQuestionTitle)
+                break;
+            case clientInvoicedQuestionTitle:
+                setClientChoices(questions[i], clientInvoicedQuestionTitle)
+                break;
+            case providerToSendQuestionTitle:
+                setProviderChoices(questions[i], providerToSendQuestionTitle)
+                break;
+            case providerInvoiceQuestionTitle:
+                setProviderChoices(questions[i], providerInvoiceQuestionTitle)
+                break;
+            case providerPayerQuestionTitle:
+                setProviderChoices(questions[i], providerPayerQuestionTitle)
                 break;
             case salariesQuestionTitle:
                 setSalariesChoices(questions[i])
@@ -108,9 +118,31 @@ function setProjectQuestionTitleChoices(question){
 }
 
 
-function setClientsChoices(question, qTitle){
+function setClientChoices(question, qTitle){
     var list = question.asListItem();
     var data = getClients();
+    var choices = getChoicesFromList(data, list);
+
+    list.setChoices(choices);
+    Logger.log("Choices have been updated for question: %s", qTitle);
+}
+
+function setProviderChoices(question, qTitle){
+    var list = question.asListItem();
+    var data = getProviders();
+    var choices = getChoicesFromList(data, list);
+
+
+    var data = getClients();
+    var choices = getChoicesFromList(data, list);
+
+    list.setChoices(choices);
+    Logger.log("Choices have been updated for question: %s", qTitle);
+}
+
+function setProviderChoices(question, qTitle){
+    var list = question.asListItem();
+    var data = getProviders();
     var choices = getChoicesFromList(data, list);
 
     list.setChoices(choices);
@@ -158,8 +190,8 @@ function getUnpaidOutcomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
                 + 'WHERE (is_income is false) and (invoice_payment_relation = "invoice") '
-                + 'and ( (invoice_group_1 != "Honorarios") and (invoice_group_1 != "Impuestos") '
-                + 'or (invoice_group_1 is null) )'
+                + 'and ( (invoice_group_2 != "Honorarios y Sueldos") and (invoice_group_2 != "Impuestos") '
+                + 'or (invoice_group_2 is null) )'
                 + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
@@ -183,15 +215,16 @@ function getUninvoicedOutcomePayments() {
     return data;
 }
 
-function getProjects() {
-    const query = 'SELECT invoice_group_3 FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE invoice_group_3 is not null '
-                 +'GROUP BY invoice_group_3';
+
+function getProviders() {
+    const query = 'SELECT counterpart FROM '
+                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
+                 +'WHERE (relation = "Proveedor") and (upload_source = "manual")'
+                 + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
 
-    var data = rowsToList(rows, "No hay Centros de Coste (CC) cargados")
+    var data = rowsToList(rows, "No hay Proveedores cargados")
 
     return data;
 }
@@ -199,7 +232,7 @@ function getProjects() {
 function getClients() {
     const query = 'SELECT counterpart FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
-                 +'WHERE relation = "Cliente"'
+                 +'WHERE (relation = "Cliente") and (upload_source = "manual")'
                  + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
@@ -213,7 +246,7 @@ function getClients() {
 function getSalaries() {
     const query = 'SELECT counterpart, invoice_group_1, invoice_group_2, currency, amount FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (invoice_group_1 = "Honorarios") and (invoice_payment_relation = "invoice")'
+                 +'WHERE (invoice_group_2 = "Honorarios y Sueldos") and (invoice_payment_relation = "invoice")'
                  + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
@@ -226,7 +259,7 @@ function getSalaries() {
 function getPendingTaxes() {
     const query = 'SELECT counterpart, invoice_group_1, invoice_group_2, currency, amount FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (invoice_group_1 = "Impuestos") and (invoice_payment_relation = "invoice") '
+                 +'WHERE (invoice_group_2 = "Impuestos") and (invoice_payment_relation = "invoice") '
                  + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
