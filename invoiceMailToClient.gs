@@ -65,7 +65,7 @@ function sendEmailToClient( selectedClient, invoiceId, customMailContent){
     var attachment  = getAttachmentFromFileId(invoiceId);
 
     GmailApp.sendEmail(clientEmail, subject, '', {
-      cc          : internalEmail,
+      cc          : userEmail,
       htmlBody    : body,
       attachments : attachment,
     })

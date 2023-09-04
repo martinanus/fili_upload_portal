@@ -1,4 +1,5 @@
 const userName                         = "Iberogram"
+const userEmail                        = "soporte@somosfili.com"
 const internalEmail                    = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"
 
@@ -16,8 +17,6 @@ const projectQuestionTitle              = "Marcá el Centro de Coste (CC) corres
 const clientsToSendQuestionTitle        = "Seleccioná el cliente del que proviene la factura que estás cargando";
 const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
 const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
-
-
 
 
 const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
@@ -142,7 +141,8 @@ function setTaxesChoices(question){
 function getUnpaidIncomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (is_income is true) and (invoice_payment_relation = "invoice")'
+                 +'WHERE (is_income is true) and (invoice_payment_relation = "invoice") '
+                 + 'and (is_invoice = true) '
                  +'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
@@ -158,6 +158,7 @@ function getUnpaidOutcomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
                 + 'WHERE (is_income is false) and (invoice_payment_relation = "invoice") '
+                + 'and (is_invoice = true) '
                 + 'and ( (invoice_group_1 != "Honorarios") and (invoice_group_1 != "Impuestos") '
                 + 'or (invoice_group_1 is null) )'
                 + 'ORDER BY counterpart ASC';
@@ -173,7 +174,8 @@ function getUnpaidOutcomeInvoices() {
 function getUninvoicedOutcomePayments() {
     const query = 'SELECT payment_counterpart, payment_currency, payment_amount, payment_date FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 + 'WHERE (is_income is false) and (invoice_payment_relation = "payment")'
+                 + 'WHERE (is_income is false) and (invoice_payment_relation = "payment") '
+                 + 'and (is_invoice = true) '
                  + 'ORDER BY payment_counterpart ASC';
 
     var rows = runQuery(query)
@@ -199,7 +201,7 @@ function getProjects() {
 function getClients() {
     const query = 'SELECT counterpart FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
-                 +'WHERE relation = "Cliente"'
+                 +'WHERE (relation = "Cliente") and (upload_source = "manual")'
                  + 'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
