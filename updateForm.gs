@@ -12,15 +12,14 @@ const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc14
 const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente a la que vincular el cobro recibido";
 const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
 const uninvoicedOutcomePaymentQuestionTitle = "Seleccioná el pago al que se vincula la nueva factura cargada";
-const clientsToSendQuestionTitle        = "Seleccioná el cliente del que proviene la factura que estás cargando";
+const uninvoicedIncomePaymentQuestionTitle = "Seleccioná el cobro a cliente al que se vincula la nueva factura cargada";
+const clientsToSendQuestionTitle        = "Seleccioná el cliente del que proviene la factura que estás cargando"
 const clientPayerQuestionTitle          = "Seleccioná el cliente que realizó el pago"
 const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
 const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
 const providerToSendQuestionTitle       = "Seleccioná el proveedor al que enviarle el comprobante de pago"
 const providerInvoiceQuestionTitle      = "Seleccioná el proveedor del que proviene la factura que estás cargando"
 const providerPayerQuestionTitle        = "Seleccioná el proveedor al que se realizó el pago"
-
-
 const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
 const sendInvoiceChoice                 = 'Envío de factura a clientes'
 const invoiceAttachQuestionTitle        = 'ENVÍO FACTURA - Adjuntá la factura a enviar'
@@ -50,6 +49,9 @@ function updateForm() {
                 break;
             case uninvoicedOutcomePaymentQuestionTitle:
                 setUninvoicedOutcomePaymentChoices(questions[i])
+                break;
+            case uninvoicedIncomePaymentQuestionTitle:
+                setUninvoicedIncomePaymentChoices(questions[i])
                 break;
             case clientsToSendQuestionTitle:
                 setClientChoices(questions[i], clientsToSendQuestionTitle)
@@ -107,14 +109,13 @@ function setUninvoicedOutcomePaymentChoices(question){
     Logger.log("Choices have been updated for question: %s", uninvoicedOutcomePaymentQuestionTitle);
 }
 
-function setProjectQuestionTitleChoices(question){
-    var multipleChoice = question.asMultipleChoiceItem();
-    var data = getProjects();
-    var choices = getChoicesFromList(data, multipleChoice);
+function setUninvoicedIncomePaymentChoices(question){
+    var list = question.asListItem();
+    var data = getUninvoicedIncomePayments();
+    var choices = getChoicesFromList(data, list);
 
-    multipleChoice.setChoices(choices);
-    multipleChoice.showOtherOption(true);
-    Logger.log("Choices have been updated item question: %s", projectQuestionTitle);
+    list.setChoices(choices);
+    Logger.log("Choices have been updated for question: %s", uninvoicedIncomePaymentQuestionTitle);
 }
 
 
@@ -127,18 +128,6 @@ function setClientChoices(question, qTitle){
     Logger.log("Choices have been updated for question: %s", qTitle);
 }
 
-function setProviderChoices(question, qTitle){
-    var list = question.asListItem();
-    var data = getProviders();
-    var choices = getChoicesFromList(data, list);
-
-
-    var data = getClients();
-    var choices = getChoicesFromList(data, list);
-
-    list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", qTitle);
-}
 
 function setProviderChoices(question, qTitle){
     var list = question.asListItem();
@@ -174,7 +163,8 @@ function setTaxesChoices(question){
 function getUnpaidIncomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (is_income is true) and (invoice_payment_relation = "invoice")'
+                 +'WHERE (is_income is true) and (invoice_payment_relation = "invoice") '
+                 + 'and (is_invoice = true) '
                  +'ORDER BY counterpart ASC';
 
     var rows = runQuery(query)
@@ -190,6 +180,7 @@ function getUnpaidOutcomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
                 + 'WHERE (is_income is false) and (invoice_payment_relation = "invoice") '
+                + 'and (is_invoice = true)'
                 + 'and ( (invoice_group_2 != "Honorarios y Sueldos") and (invoice_group_2 != "Impuestos") '
                 + 'or (invoice_group_2 is null) )'
                 + 'ORDER BY counterpart ASC';
@@ -205,7 +196,22 @@ function getUnpaidOutcomeInvoices() {
 function getUninvoicedOutcomePayments() {
     const query = 'SELECT payment_counterpart, payment_currency, payment_amount, payment_date FROM '
                  + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 + 'WHERE (is_income is false) and (invoice_payment_relation = "payment")'
+                 + 'WHERE (is_income is false) and (invoice_payment_relation = "payment") '
+                 + 'and (is_invoice = true)'
+                 + 'ORDER BY payment_counterpart ASC';
+
+    var rows = runQuery(query)
+
+    var data = concatenateCols(rows)
+
+    return data;
+}
+
+function getUninvoicedIncomePayments() {
+    const query = 'SELECT payment_counterpart, payment_currency, payment_amount, payment_date FROM '
+                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
+                 + 'WHERE (is_income is true) and (invoice_payment_relation = "payment") '
+                 + 'and (is_invoice = true)'
                  + 'ORDER BY payment_counterpart ASC';
 
     var rows = runQuery(query)
