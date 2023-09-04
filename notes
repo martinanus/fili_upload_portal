@@ -1,3 +1,7 @@
+BUG:
+	el envio de mail va con copia al usuario IBERO
+	clients to show are only added by user (update query)
+
 Pendientes:
 
 si la carpeta dentro de Pagos no existe
