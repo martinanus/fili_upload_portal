@@ -24,7 +24,7 @@ const sendInvoiceChoice                 = 'Envío de factura a clientes'
 const invoiceAttachQuestionTitle        = 'ENVÍO FACTURA - Adjuntá la factura a enviar'
 const clientSelectionQuestionTitle      = 'Seleccioná el cliente al que enviarle la factura'
 const customMailContentQuestionTitle    = ("En caso de querer modificar el contenido del mail que se enviará a tu cliente, "
-                                        + "escribí acá el nuevo texto a incluir.\nEl mensaje por defecto, si se deja vacía esta "
+                                        + "escribí acá el nuevo texto a incluir. \nEl mensaje por defecto, si se deja vacía esta "
                                         + "respuesta, se muestra acá.")
 
 
