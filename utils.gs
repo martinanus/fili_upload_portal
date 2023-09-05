@@ -160,4 +160,89 @@ function copyFileToFolder(fileId, folderId){
     console.log("File: " + copiedFile.getName() + " copied to: " + destination.getName());
 }
 
+function getCounterpartEmail(counterpartName){
+    const query = 'SELECT contact_email FROM '
+                + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
+                 +'WHERE counterpart = "' + counterpartName + '"';
 
+
+    var rows = runQuery(query)
+
+    var data = rowsToList(rows, "No se encontró la contraparte en el CRM")
+
+    var countepartEmail = data[0];
+
+    Logger.log("countepartEmail is: " + countepartEmail)
+
+    return countepartEmail
+}
+
+function getAttachmentsFromFileIds(fileIds){
+    blobList = [];
+    for (var i = 0; i < fileIds.length; i++) {
+        let file = DriveApp.getFileById(fileIds[i]);
+        blobList.push(file.getBlob());
+    }
+    return blobList;
+}
+
+
+function getEmailBody(customMailContent, counterpartName, destination){
+    let emoji_html = "&#128075;"
+    let documentType;
+    if (destination == "Client"){
+        documentType = "la factura generada "
+    } else {
+        documentType = "el comprobante del pago realizado "
+    }
+    let defaultBody = `Hola ${emoji_html}, <BR><BR>`
+                + `Le enviamos `
+                + documentType
+                + `por ` + userName + ` <BR><BR>`
+                + `¡Muchas gracias! <BR><BR>`
+                + `El equipo de SIP.`;
+
+
+    if (customMailContent){
+        customMailContent += getFiliUrlWithUtm(counterpartName);
+        return customMailContent.replaceAll("\n", "<BR>");
+    }
+
+    defaultBody += getFiliUrlWithUtm(counterpartName);
+
+    return defaultBody;
+
+}
+
+function getSubject(userName, selectedCounterpart, destination){
+    var clientSubject     = `Factura ` + userName + ` - ` + selectedCounterpart;
+    var providerSubject   = `Comprobante de pago ` + userName + ` - ` + selectedCounterpart;
+    if (destination == "Client"){
+        return clientSubject;
+    } else {
+        return providerSubject;;
+    }
+}
+
+
+function sendEmailToCounterpart(selectedCounterpart, invoicesId, customMailContent, destination){
+
+    var subject         = getSubject(userName, selectedCounterpart, destination)
+    var body            = getEmailBody(customMailContent, selectedCounterpart, destination);
+    var countepartEmail = getCounterpartEmail(selectedCounterpart);
+    var attachment      = getAttachmentsFromFileIds(invoicesId);
+
+    GmailApp.sendEmail(countepartEmail, subject, '', {
+      cc          : userEmail,
+      bcc         : internalEmail,
+      htmlBody    : body,
+      attachments : attachment,
+    })
+
+    Logger.log("Se notificó al " + destination + " : " + selectedCounterpart);
+
+}
+
+function getProviderFromInvoice(invoice){
+    return invoice.split(" - ")[0]
+}

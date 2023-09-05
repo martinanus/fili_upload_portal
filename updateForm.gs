@@ -10,6 +10,7 @@ const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
 const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc147y_ao6Q';
 
+const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
 const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente a la que vincular el cobro recibido";
 const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
 const uninvoicedOutcomePaymentQuestionTitle = "Seleccioná el pago al que se vincula la nueva factura cargada";
@@ -19,7 +20,7 @@ const clientsToSendQuestionTitle        = 'Seleccioná el cliente al que enviarl
 const clientPayerQuestionTitle          = "Seleccioná el cliente que realizó el pago"
 const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
 const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
-const providerToSendQuestionTitle       = "Seleccioná el proveedor al que enviarle el comprobante de pago"
+const providersToSendQuestionTitle      = "Seleccioná el proveedor al que enviarle el comprobante de pago"
 const providerInvoiceQuestionTitle      = "Seleccioná el proveedor del que proviene la factura que estás cargando"
 const providerPayerQuestionTitle        = "Seleccioná el proveedor al que se realizó el pago"
 
@@ -56,8 +57,8 @@ function updateForm() {
             case clientInvoicedQuestionTitle:
                 setClientChoices(questions[i], clientInvoicedQuestionTitle)
                 break;
-            case providerToSendQuestionTitle:
-                setProviderChoices(questions[i], providerToSendQuestionTitle)
+            case providersToSendQuestionTitle:
+                setProviderChoices(questions[i], providersToSendQuestionTitle)
                 break;
             case providerInvoiceQuestionTitle:
                 setProviderChoices(questions[i], providerInvoiceQuestionTitle)

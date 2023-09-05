@@ -6,8 +6,6 @@ Solved:
 	el envio de mail va con copia al usuario
 
 Pendientes:
-receiptMailToProvider
-
 
 si la carpeta dentro de Pagos no existe
 	- no se pueden crear carpetas y moverlas donde uno quiere
