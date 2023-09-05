@@ -1,26 +1,11 @@
-const providerInvoice     = "FACTURA PROVEEDOR - Adjuntá la factura"
-const providerPayment     = "COMPROBANTE PAGO A PROVEEDORES - Adjuntá la documentación relativa al pago (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
+const clientInvoiceSend         = "ENVÍO FACTURA - Adjuntá la factura a enviar"
+const clientInvoiceNoSend       = "FACTURA CLIENTE (SIN ENVÍO) -  Adjuntá la factura"
+const clientPayment             = "COMPROBANTE COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
+const clientDocsPayment         = "DOCUMENTACIÓN COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
+const clientPaymentPrevInvoice  = "COMPROBANTE COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
+const clientDocsPrevInvoice     = "DOCUMENTACIÓN COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 
-const providerPaymentNoInvoice = "COMPROBANTE PAGO A PROVEEDORES previo a factura- Adjuntá la documentación relativa al pago (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const providerPaymentWithInvoice = "COMPROBANTE PAGO A PROVEEDORES con factura - Adjuntá la documentación relativa al pago (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-
-const clientInvoiceSend = "ENVÍO FACTURA - Adjuntá la factura a enviar"
-const clientInvoiceNoSend = "FACTURA CLIENTE (SIN ENVÍO) -  Adjuntá la factura"
-const clientPaymentPrevInvoice = "COMPROBANTE COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const clientPayment = "COMPROBANTE COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-
-const pendingSalariesPayment = "COMPROBANTE PAGO SUELDOS/HONORARIOS - Adjuntá la documentación relativa al pago (comprobante, etc).\nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip)"
-const salariesUpload = "CARGA SUELDOS/HONORARIOS - Adjuntá la documentación asociada (Factura monotributista, Recibos de sueldos). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const salariesPayment = "PAGO DE SUELDOS/HONORARIOS - Adjuntá la documentación relativa al pago (recibo de sueldo, factura monotributista, comprobante de pago, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-
-const taxesPayment = "PAGO DE IMPUESTOS - Adjuntá la documentación relativa al pago (comprobante, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const taxesUpload = "CARGA IMPUESTOS - Adjuntá el VEP del impuesto"
-const pendingTaxesPayment = "PAGO IMPUESTOS - Adjuntá la documentación relativa al pago del impuesto"
-
-const selectFolderForProviderPayment1 = "¿En qué carpeta de Pagos de Drive querés cargar la factura? "
-const selectFolderForProviderPayment2 = "¿En qué carpeta de Pagos de Drive querés cargar el pago? "
-
-
+const keyWordForDocuments       = "Adjuntá"
 
 function uploadAttachedFiles(){
     var form = FormApp.openById(formId);
@@ -29,49 +14,26 @@ function uploadAttachedFiles(){
 
     var itemResponses = formResponse.getItemResponses();
     var destinationFolderId = ""
-    var uploadProvider = false;
 
     for (var j = 0; j < itemResponses.length; j++) {
         let itemResponse = itemResponses[j];
         let title        = itemResponse.getItem().getTitle();
-        switch(title){
-            case clientInvoiceSend:
-            case clientInvoiceNoSend:
-            case clientPaymentPrevInvoice:
-            case clientPayment:
-                destinationFolderId = searchFolderId("Cobranzas")
-                makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
-                break;
-            case providerPaymentWithInvoice:
-                destinationFolderId = searchFolderId("Pagos")
-                makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
-                break;
-            case pendingSalariesPayment:
-            case salariesUpload:
-            case salariesPayment:
-                destinationFolderId = searchFolderId("Pagos", "Empleados")
-                makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
-                break;
-            case taxesPayment:
-            case taxesUpload:
-            case pendingTaxesPayment:
-                destinationFolderId = searchFolderId("Pagos", "Impuestos")
-                makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
-                break;
-            case providerInvoice:
-            case providerPayment:
-            case providerPaymentNoInvoice:
-                uploadProvider = true;
-                var providerFilesId = itemResponse.getResponse();
-                break;
-            case selectFolderForProviderPayment1:
-            case selectFolderForProviderPayment2:
-                var paymentType = itemResponse.getResponse();
-                break;
+        if (title.includes(keyWordForDocuments)){
+            switch(title){
+                case clientInvoiceSend:
+                case clientInvoiceNoSend:
+                case clientPayment:
+                case clientDocsPayment:
+                case clientPaymentPrevInvoice:
+                case clientDocsPrevInvoice:
+                    destinationFolderId = searchFolderId("Cobranzas")
+                    makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
+                    break;
+                default:
+                    destinationFolderId = searchFolderId("Pagos")
+                    makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
+                    break;
+            }
         }
-    }
-    if (uploadProvider){
-        destinationFolderId = searchFolderId("Pagos", paymentType)
-        makeFilesCopy(providerFilesId, destinationFolderId);
     }
 }

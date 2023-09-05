@@ -1,5 +1,6 @@
 const userName                         = "SIP"
 const internalEmail                    = "soporte@somosfili.com"
+const userEmail                        = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"
 
 

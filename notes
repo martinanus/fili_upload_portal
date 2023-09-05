@@ -1,19 +1,13 @@
-Para desplegar a Ibero:
-	si null no falla en concatenate cols
-	muestro clientes solo dados de alta manualmente
-		and (upload_source = "manual") in query
 
-BUG:
-	el envio de mail va con copia al usuario
 
 Solved:
 	clients to show are only added by user (update query)
 	pendings to show only en blanco
+	el envio de mail va con copia al usuario
 
 Pendientes:
 
 invoiceMailToCLient
-notifyInternally
 uploadAttachedFiles
 
 
