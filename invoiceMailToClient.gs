@@ -66,6 +66,7 @@ function sendEmailToClient( selectedClient, invoiceId, customMailContent){
 
     GmailApp.sendEmail(clientEmail, subject, '', {
       cc          : userEmail,
+      bcc         : internalEmail,
       htmlBody    : body,
       attachments : attachment,
     })
