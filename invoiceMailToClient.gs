@@ -1,3 +1,9 @@
+const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
+const sendInvoiceChoice                 = 'Envío de factura a clientes'
+const invoiceAttachQuestionTitle        = 'ENVÍO FACTURA - Adjuntá la factura a enviar'
+const clientToSendQuestionTitle         = 'Seleccioná el cliente al que enviarle la factura'
+const customMailContentQuestionTitle    = "En caso de querer modificar el contenido del mail que se enviará a tu cliente, escribí acá el nuevo texto a incluir. \nEl mensaje por defecto, si se deja vacía esta respuesta, se muestra acá."
+
 
 function sendInvoiceEmailToClient(){
     var form = FormApp.openById(formId);
@@ -18,12 +24,12 @@ function sendInvoiceEmailToClient(){
             } else {
                 break;
             }
-        } else if (title == clientSelectionQuestionTitle) {
+        } else if (title == clientToSendQuestionTitle) {
             var selectedClient = itemResponse.getResponse();
             Logger.log('Selected client is : "%s"', selectedClient)
         } else if (title == invoiceAttachQuestionTitle){
-            var invoiceId = itemResponse.getResponse()[0];
-            Logger.log('Invoice to attach Id: "%s"', invoiceId)
+            var invoicesId = itemResponse.getResponse();
+            Logger.log('Invoices to attach Id: "%s"', invoicesId)
         } else if (title == customMailContentQuestionTitle){
             var customMailContent = itemResponse.getResponse();
             Logger.log('Custom mail content: "%s"', customMailContent)
@@ -36,7 +42,7 @@ function sendInvoiceEmailToClient(){
         return
     }
 
-    sendEmailToClient(selectedClient, invoiceId, customMailContent)
+    sendEmailToClient(selectedClient, invoicesId, customMailContent)
 
 }
 
@@ -57,12 +63,12 @@ function getClientEmail(clientName){
     return clientEmail
 }
 
-function sendEmailToClient( selectedClient, invoiceId, customMailContent){
+function sendEmailToClient( selectedClient, invoicesId, customMailContent){
 
     var subject     = `Factura ` + userName + ` - ` + selectedClient;
     var body        = getEmailBody(customMailContent, selectedClient);
     var clientEmail = getClientEmail(selectedClient);
-    var attachment  = getAttachmentFromFileId(invoiceId);
+    var attachment  = getAttachmentsFromFileIds(invoicesId);
 
     GmailApp.sendEmail(clientEmail, subject, '', {
       cc          : userEmail,
@@ -76,13 +82,13 @@ function sendEmailToClient( selectedClient, invoiceId, customMailContent){
 }
 
 
-function getAttachmentFromFileId(fileId){
-
-    const file = DriveApp.getFileById(fileId);
-    const theBlob = file.getBlob();
-
-    return [theBlob]
-
+function getAttachmentsFromFileIds(fileIds){
+    blobList = [];
+    for (var i = 0; i < fileIds.length; i++) {
+        let file = DriveApp.getFileById(fileIds[i]);
+        blobList.push(file.getBlob());
+    }
+    return blobList;
 }
 
 function getEmailBody(customMailContent, clientName){
@@ -90,7 +96,7 @@ function getEmailBody(customMailContent, clientName){
     let defaultBody = `Hola ${emoji_html}, <BR><BR>`
                 + `Le enviamos la nueva factura generada por ` + userName + ` <BR><BR>`
                 + `¡Muchas gracias! <BR><BR>`
-                + `El equipo de Iberogram.`;
+                + `El equipo de SIP.`;
 
 
     if (customMailContent){

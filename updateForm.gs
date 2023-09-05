@@ -1,11 +1,11 @@
 const userName                         = "SIP"
 const internalEmail                    = "soporte@somosfili.com"
-const userEmail                        = "soporte@somosfili.com"
+const userEmail                        = "soporte@somosfili.com" // TODO - UPDATE IN PROD
 const filiWebSiteUrl                   = "www.somosfili.com"
 
 
 const bqProjectId                       = 'fili-377220';
-const bqDataset                         = 'sip'
+const bqDataset                         = 'fili_sandbox' // TODO - UPDATE IN PROD
 const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
 const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc147y_ao6Q';
@@ -14,21 +14,14 @@ const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente 
 const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
 const uninvoicedOutcomePaymentQuestionTitle = "Seleccioná el pago al que se vincula la nueva factura cargada";
 const uninvoicedIncomePaymentQuestionTitle = "Seleccioná el cobro a cliente al que se vincula la nueva factura cargada";
-const clientsToSendQuestionTitle        = "Seleccioná el cliente del que proviene la factura que estás cargando"
+const clientInvoicedQuestionTitle       = "Seleccioná el cliente del que proviene la factura que estás cargando"
+const clientsToSendQuestionTitle        = 'Seleccioná el cliente al que enviarle la factura'
 const clientPayerQuestionTitle          = "Seleccioná el cliente que realizó el pago"
 const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
 const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
 const providerToSendQuestionTitle       = "Seleccioná el proveedor al que enviarle el comprobante de pago"
 const providerInvoiceQuestionTitle      = "Seleccioná el proveedor del que proviene la factura que estás cargando"
 const providerPayerQuestionTitle        = "Seleccioná el proveedor al que se realizó el pago"
-const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
-const sendInvoiceChoice                 = 'Envío de factura a clientes'
-const invoiceAttachQuestionTitle        = 'ENVÍO FACTURA - Adjuntá la factura a enviar'
-const clientInvoicedQuestionTitle       = 'Seleccioná el cliente al que enviarle la factura'
-const customMailContentQuestionTitle    = ("En caso de querer modificar el contenido del mail que se enviará a tu cliente, "
-                                        + "escribí acá el nuevo texto a incluir.\nEl mensaje por defecto, si se deja vacía esta "
-                                        + "respuesta, se muestra acá.")
-
 
 
 function doGet(e) {

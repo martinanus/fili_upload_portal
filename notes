@@ -6,9 +6,7 @@ Solved:
 	el envio de mail va con copia al usuario
 
 Pendientes:
-
-invoiceMailToCLient
-uploadAttachedFiles
+receiptMailToProvider
 
 
 si la carpeta dentro de Pagos no existe
