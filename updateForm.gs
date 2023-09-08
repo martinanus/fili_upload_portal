@@ -1,10 +1,12 @@
 const userName                         = "SIP"
 const userEmail                        = "soporte@somosfili.com" // TODO - UPDATE IN PROD
-const internalEmail                    = "soporte@somosfili.com"
-const filiWebSiteUrl                   = "www.somosfili.com"
 const userBank                         = "Banco de SIP"         // TODO - UPDATE IN PROD
 const userBankAccountOwner             = "SIP SA"               // TODO - UPDATE IN PROD
 const userCbuAlias                     = "sip.coffee"           // TODO - UPDATE IN PROD
+const externalPortalLink               = "https://docs.google.com/forms/d/e/1FAIpQLSdKYowRKin1xxI-LObKd2jonHU7Je9wj8EnpjRVaCidFakfmg/viewform"
+
+const internalEmail                    = "soporte@somosfili.com"
+const filiWebSiteUrl                   = "www.somosfili.com"
 
 
 const bqProjectId                       = 'fili-377220';
