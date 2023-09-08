@@ -1,11 +1,14 @@
 const userName                         = "SIP"
-const internalEmail                    = "soporte@somosfili.com"
 const userEmail                        = "soporte@somosfili.com" // TODO - UPDATE IN PROD
+const internalEmail                    = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"
+const userBank                         = "Banco de SIP"         // TODO - UPDATE IN PROD
+const userBankAccountOwner             = "SIP SA"               // TODO - UPDATE IN PROD
+const userCbuAlias                     = "sip.coffee"           // TODO - UPDATE IN PROD
 
 
 const bqProjectId                       = 'fili-377220';
-const bqDataset                         = 'fili_sandbox' // TODO - UPDATE IN PROD
+const bqDataset                         = 'fili_sandbox'        // TODO - UPDATE IN PROD
 const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
 const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc147y_ao6Q';

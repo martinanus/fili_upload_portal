@@ -187,6 +187,29 @@ function getAttachmentsFromFileIds(fileIds){
 }
 
 
+function getBankDataInformation(destination){
+    if(destination != "Client"){
+        return "";
+    }
+    var paymentAnounce = "A continuación encontrará los datos para el pago de la factura: <BR>"
+    var bankDataInformation = "Banco     : " + userBank + "<BR>"
+                            + "Titular   : " + userBankAccountOwner + "<BR>"
+                            + "CBU/Alias : " + userCbuAlias + "<BR><BR>"
+    return paymentAnounce + bankDataInformation ;
+}
+
+function getExternalPortalInformation(destination){
+    if(destination != "Client"){
+        return "";
+    }
+    var externalPortalInformation = "Le pedimos por favor que, una vez paga la factura, cargue el comprobante de pago "
+                        + "en nuestro Portal de Carga que pueden acceder "
+                        + `<a href=${externalPortalLink}>clickeando aquí</a> `
+                        + "identificándose con el CUIT de su empresa. <BR><BR>"
+    return externalPortalInformation;
+}
+
+
 function getEmailBody(customMailContent, counterpartName, destination){
     let emoji_html = "&#128075;"
     let documentType;
@@ -199,6 +222,8 @@ function getEmailBody(customMailContent, counterpartName, destination){
                 + `Le enviamos `
                 + documentType
                 + `por ` + userName + ` <BR><BR>`
+                + getBankDataInformation(destination)
+                + getExternalPortalInformation(destination)
                 + `¡Muchas gracias! <BR><BR>`
                 + `El equipo de SIP.`;
 

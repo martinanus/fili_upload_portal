@@ -1,4 +1,4 @@
-rootFolderId = "1Hum3p2nS_9tSIvr0NTfveSo8mtfckX0_"
+rootFolderId = "12FHFOmdji-CftGIowrxuYNt6cRngK4-P" // TODO - Update this
 
 function searchFolderId(transactionType){
     var rootFolder = DriveApp.getFolderById(rootFolderId)
