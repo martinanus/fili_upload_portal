@@ -1,3 +1,4 @@
+//rootFolderId = ""
 rootFolderId = "12FHFOmdji-CftGIowrxuYNt6cRngK4-P" // TODO - Update this
 
 function searchFolderId(transactionType){

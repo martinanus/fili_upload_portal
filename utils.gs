@@ -225,7 +225,7 @@ function getEmailBody(customMailContent, counterpartName, destination){
                 + getBankDataInformation(destination)
                 + getExternalPortalInformation(destination)
                 + `¡Muchas gracias! <BR><BR>`
-                + `El equipo de SIP.`;
+                + `El equipo de ${userName}.`;
 
 
     if (customMailContent){

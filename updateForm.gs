@@ -1,15 +1,17 @@
-const userName                         = "SIP"
-const userEmail                        = "soporte@somosfili.com" // TODO - UPDATE IN PROD
-const userBank                         = "Banco de SIP"         // TODO - UPDATE IN PROD
-const userBankAccountOwner             = "SIP SA"               // TODO - UPDATE IN PROD
-const userCbuAlias                     = "sip.coffee"           // TODO - UPDATE IN PROD
-const externalPortalLink               = "https://docs.google.com/forms/d/e/1FAIpQLSdKYowRKin1xxI-LObKd2jonHU7Je9wj8EnpjRVaCidFakfmg/viewform"
+const userName                         = "Lucio Laria"
+const userEmail                        = "soporte@somosfili.com, martuanus@gmail.com" // TODO - UPDATE IN PROD
+//const userEmail                        = ""
+const userBank                         = "Banco de Lucio Laria"         // TODO - UPDATE IN PROD
+const userBankAccountOwner             = "Lucio Laria SA"               // TODO - UPDATE IN PROD
+const userCbuAlias                     = "lucio.laria"                  // TODO - UPDATE IN PROD
+const externalPortalLink               = "https://docs.google.com/forms/d/e/1FAIpQLSc2Noh7ppru59QRjCFqTIlXIpUVSTZhYYQ6-JT0d_MECR0YaQ/viewform"
 
 const internalEmail                    = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"
 
 
 const bqProjectId                       = 'fili-377220';
+//const bqDataset                         = 'luciolaria'
 const bqDataset                         = 'fili_sandbox'        // TODO - UPDATE IN PROD
 const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
