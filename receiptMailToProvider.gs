@@ -1,13 +1,6 @@
 
 const sendReceiptChoice                 = 'Envío de comprobante de pago a proveedor'
 
-const invoiceInSystemQuestionTitle      = 'Seleccioná la opción que mejor describa el caso'
-const invoiceInSystemChoice             = 'El pago AÚN NO tiene una factura cargada en el sistema'
-const noInvoiceInSystemChoice           = 'El pago TIENE una factura previamente cargada en el sistema'
-
-const providerToSendQuestionTitle       = "Seleccioná el proveedor al que enviarle el comprobante de pago"
-const paymentNoInvoiceAttachQuestionTitle = 'ENVÍO COMPROBANTE DE PAGO sin factura previa - Adjuntá el comprobante de pago a enviar'
-
 const invoiceMatchQuestionTitle         = "Seleccioná la factura a la que se vincula el pago";
 const paymentWInvoiceAttachQuestionTitle = 'ENVÍO COMPROBANTE DE PAGO - Adjuntá el comprobante de pago a enviar'
 

@@ -1,23 +1,2 @@
-
-
-Solved:
-	clients to show are only added by user (update query)
-	pendings to show only en blanco
-	el envio de mail va con copia al usuario
-
-Pendientes:
-
-si la carpeta dentro de Pagos no existe
-	- no se pueden crear carpetas y moverlas donde uno quiere
-	- archivo queda tirado en pagos y hay que crear a mano
-
-Carpeta POR factura
-
-Post-procesamiento de Datos:
-	Reordernar rptas sheet en varias tabs
-
-
-actualizar diagrama de flujo form
-
-
--------------------------------------------
+Crear mails con idiomas
+Poner link a PDF con mails por defecto - en idiomas

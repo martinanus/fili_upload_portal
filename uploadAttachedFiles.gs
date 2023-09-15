@@ -1,9 +1,4 @@
-const clientInvoiceSend         = "ENVÍO FACTURA - Adjuntá la factura a enviar"
-const clientInvoiceNoSend       = "FACTURA CLIENTE (SIN ENVÍO) -  Adjuntá la factura"
-const clientPayment             = "COMPROBANTE COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const clientDocsPayment         = "DOCUMENTACIÓN COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 const clientPaymentPrevInvoice  = "COMPROBANTE COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
-const clientDocsPrevInvoice     = "DOCUMENTACIÓN COBRO A CLIENTES con factura previa - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 
 const keyWordForDocuments       = "Adjuntá"
 

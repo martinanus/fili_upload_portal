@@ -15,21 +15,14 @@ const bqProjectId                       = 'fili-377220';
 const bqDataset                         = 'fili_sandbox'        // TODO - UPDATE IN PROD
 const bqInvoicePaymentsTableName        = 'ip_01_invoices_and_payments_t'
 const bqCrmTableName                    = 'i_00_counterpart_upload_ext'
-const formId                            = '1FRNXYh3clDy1R8HCu9qIp7YHPyT7NT_PIc147y_ao6Q';
+const formId                            = '1L5G5VcaClixVaR3TRXWnB4ijizb5Pjqtfh-91Fqh6g8';
 
 const transactionTypeQuestionTitle      = "¿Qué tipo de transacción querés realizar?"
-const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente a la que vincular el cobro recibido";
-const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
-const uninvoicedOutcomePaymentQuestionTitle = "Seleccioná el pago al que se vincula la nueva factura cargada";
-const uninvoicedIncomePaymentQuestionTitle = "Seleccioná el cobro a cliente al que se vincula la nueva factura cargada";
-const clientInvoicedQuestionTitle       = "Seleccioná el cliente del que proviene la factura que estás cargando"
-const clientsToSendQuestionTitle        = 'Seleccioná el cliente al que enviarle la factura'
-const clientPayerQuestionTitle          = "Seleccioná el cliente que realizó el pago"
-const salariesQuestionTitle             = "Seleccione los sueldos/honorarios que quiere marcar como pagos";
-const taxesQuestionTitle                = "Seleccioná el impuesto que pagaste";
-const providersToSendQuestionTitle      = "Seleccioná el proveedor al que enviarle el comprobante de pago"
 const providerInvoiceQuestionTitle      = "Seleccioná el proveedor del que proviene la factura que estás cargando"
-const providerPayerQuestionTitle        = "Seleccioná el proveedor al que se realizó el pago"
+const unpaidOutcomeInvoiceQuestionTitle = "Seleccioná la factura a la que se vincula el pago";
+const unpaidIncomeInvoiceQuestionTitle  = "Seleccioná la factura de un cliente a la que vincular el cobro recibido";
+const projectQuestionTitle              = "Indicá el Proyecto que corresponda"
+const businessUnitQuestionTitle         = "Indicá la Unidad de Negocios que corresponda"
 
 
 function doGet(e) {
@@ -49,40 +42,22 @@ function updateForm() {
             case unpaidOutcomeInvoiceQuestionTitle:
                 setUnpaidOutcomeInvoicesChoices(questions[i])
                 break;
-            case uninvoicedOutcomePaymentQuestionTitle:
-                setUninvoicedOutcomePaymentChoices(questions[i])
-                break;
-            case uninvoicedIncomePaymentQuestionTitle:
-                setUninvoicedIncomePaymentChoices(questions[i])
-                break;
-            case clientsToSendQuestionTitle:
-                setClientChoices(questions[i], clientsToSendQuestionTitle)
-                break;
-            case clientPayerQuestionTitle:
-                setClientChoices(questions[i], clientPayerQuestionTitle)
-                break;
-            case clientInvoicedQuestionTitle:
-                setClientChoices(questions[i], clientInvoicedQuestionTitle)
-                break;
-            case providersToSendQuestionTitle:
-                setProviderChoices(questions[i], providersToSendQuestionTitle)
-                break;
             case providerInvoiceQuestionTitle:
-                setProviderChoices(questions[i], providerInvoiceQuestionTitle)
+                setProviderChoices(questions[i])
                 break;
-            case providerPayerQuestionTitle:
-                setProviderChoices(questions[i], providerPayerQuestionTitle)
+            case projectQuestionTitle:
+                setProjectChoices(questions[i])
                 break;
-            case salariesQuestionTitle:
-                setSalariesChoices(questions[i])
-                break;
-            case taxesQuestionTitle:
-                setTaxesChoices(questions[i])
+            case businessUnitQuestionTitle:
+                setBusinessUnitChoices(questions[i])
                 break;
         }
     }
 }
 
+/*-----------------------------------------------------------
+---------------- SETTERS-------------------------------------
+-----------------------------------------------------------*/
 function setUnpaidIncomeInvoicesChoices(question){
     var list = question.asListItem();
     var data = getUnpaidIncomeInvoices();
@@ -102,66 +77,38 @@ function setUnpaidOutcomeInvoicesChoices(question){
     Logger.log("Choices have been updated for question: %s", unpaidOutcomeInvoiceQuestionTitle);
 }
 
-function setUninvoicedOutcomePaymentChoices(question){
-    var list = question.asListItem();
-    var data = getUninvoicedOutcomePayments();
-    var choices = getChoicesFromList(data, list);
 
-    list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", uninvoicedOutcomePaymentQuestionTitle);
-}
-
-function setUninvoicedIncomePaymentChoices(question){
-    var list = question.asListItem();
-    var data = getUninvoicedIncomePayments();
-    var choices = getChoicesFromList(data, list);
-
-    list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", uninvoicedIncomePaymentQuestionTitle);
-}
-
-
-function setClientChoices(question, qTitle){
-    var list = question.asListItem();
-    var data = getClients();
-    var choices = getChoicesFromList(data, list);
-
-    list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", qTitle);
-}
-
-
-function setProviderChoices(question, qTitle){
+function setProviderChoices(question){
     var list = question.asListItem();
     var data = getProviders();
     var choices = getChoicesFromList(data, list);
 
     list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", qTitle);
+    Logger.log("Choices have been updated for question: %s", providerInvoiceQuestionTitle);
 }
 
-function setSalariesChoices(question){
-    var checkbox = question.asCheckboxItem();
-    var data = getSalaries();
-    var choices = getChoicesFromList(data, checkbox);
+function setProjectChoices(question){
+    var multipleChoice = question.asMultipleChoiceItem();
+    var data = getProjects();
+    var choices = getChoicesFromList(data, multipleChoice);
 
-    checkbox.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", salariesQuestionTitle);
+    multipleChoice.setChoices(choices);
+    Logger.log("Choices have been updated for question: %s", projectQuestionTitle);
+}
+
+function setBusinessUnitChoices(question){
+    var multipleChoice = question.asMultipleChoiceItem();
+    var data = getBusinessUnit();
+    var choices = getChoicesFromList(data, multipleChoice);
+
+    multipleChoice.setChoices(choices);
+    Logger.log("Choices have been updated for question: %s", businessUnitQuestionTitle);
 }
 
 
-function setTaxesChoices(question){
-    var list = question.asListItem();
-    var data = getPendingTaxes();
-    var choices = getChoicesFromList(data, list);
-
-    list.setChoices(choices);
-    Logger.log("Choices have been updated for question: %s", uninvoicedOutcomePaymentQuestionTitle);
-}
-
-
-
-
+/*-----------------------------------------------------------
+---------------- GETTERS-------------------------------------
+-----------------------------------------------------------*/
 function getUnpaidIncomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
@@ -182,39 +129,8 @@ function getUnpaidOutcomeInvoices() {
     const query = 'SELECT counterpart, currency, amount, due_date FROM '
                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
                 + 'WHERE (is_income is false) and (invoice_payment_relation = "invoice") '
-                + 'and (is_invoice = true)'
-                + 'and ( (invoice_group_2 != "Honorarios y Sueldos") and (invoice_group_2 != "Impuestos") '
-                + 'or (invoice_group_2 is null) )'
+                + 'and (is_invoice = true) '
                 + 'ORDER BY counterpart ASC';
-
-    var rows = runQuery(query)
-
-    var data = concatenateCols(rows)
-
-    return data;
-}
-
-
-function getUninvoicedOutcomePayments() {
-    const query = 'SELECT payment_counterpart, payment_currency, payment_amount, payment_date FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 + 'WHERE (is_income is false) and (invoice_payment_relation = "payment") '
-                 + 'and (is_invoice = true)'
-                 + 'ORDER BY payment_counterpart ASC';
-
-    var rows = runQuery(query)
-
-    var data = concatenateCols(rows)
-
-    return data;
-}
-
-function getUninvoicedIncomePayments() {
-    const query = 'SELECT payment_counterpart, payment_currency, payment_amount, payment_date FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 + 'WHERE (is_income is true) and (invoice_payment_relation = "payment") '
-                 + 'and (is_invoice = true)'
-                 + 'ORDER BY payment_counterpart ASC';
 
     var rows = runQuery(query)
 
@@ -237,45 +153,30 @@ function getProviders() {
     return data;
 }
 
-function getClients() {
-    const query = 'SELECT counterpart FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
-                 +'WHERE (relation = "Cliente") and (upload_source = "manual")'
-                 + 'ORDER BY counterpart ASC';
+function getProjects() {
+    // const query = 'SELECT counterpart FROM '
+    //              + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
+    //              +'WHERE (relation = "Proveedor") and (upload_source = "manual")'
+    //              + 'ORDER BY counterpart ASC';
 
-    var rows = runQuery(query)
+    // var rows = runQuery(query)
 
-    var data = rowsToList(rows, "No hay Clientes cargados")
-
-    return data;
-}
-
-
-function getSalaries() {
-    const query = 'SELECT counterpart, invoice_group_1, invoice_group_2, currency, amount FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (invoice_group_2 = "Honorarios y Sueldos") and (invoice_payment_relation = "invoice")'
-                 + 'ORDER BY counterpart ASC';
-
-    var rows = runQuery(query)
-
-    var data = concatenateCols(rows)
+    // var data = rowsToList(rows, "No hay Proveedores cargados")
+    data = ["unProyecto", "otroProyecto"]
 
     return data;
 }
 
-function getPendingTaxes() {
-    const query = 'SELECT counterpart, invoice_group_1, invoice_group_2, currency, amount FROM '
-                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
-                 +'WHERE (invoice_group_2 = "Impuestos") and (invoice_payment_relation = "invoice") '
-                 + 'ORDER BY counterpart ASC';
+function getBusinessUnit() {
+    // const query = 'SELECT counterpart FROM '
+    //              + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
+    //              +'WHERE (relation = "Proveedor") and (upload_source = "manual")'
+    //              + 'ORDER BY counterpart ASC';
 
-    var rows = runQuery(query)
+    // var rows = runQuery(query)
 
-    var data = concatenateCols(rows)
+    // var data = rowsToList(rows, "No hay Proveedores cargados")
+    data = ["unaBU", "otraBU"]
 
     return data;
 }
-
-
-
