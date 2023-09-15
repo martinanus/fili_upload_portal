@@ -15,12 +15,7 @@ function uploadAttachedFiles(){
         let title        = itemResponse.getItem().getTitle();
         if (title.includes(keyWordForDocuments)){
             switch(title){
-                case clientInvoiceSend:
-                case clientInvoiceNoSend:
-                case clientPayment:
-                case clientDocsPayment:
                 case clientPaymentPrevInvoice:
-                case clientDocsPrevInvoice:
                     destinationFolderId = searchFolderId("Cobranzas")
                     makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
                     break;
