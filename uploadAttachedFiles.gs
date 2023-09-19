@@ -29,7 +29,7 @@ function uploadAttachedFiles(){
 
     var itemResponses = formResponse.getItemResponses();
     var destinationFolderId = ""
-    var uploadProvider = false;
+    var providerFilesIds = []
 
     for (var j = 0; j < itemResponses.length; j++) {
         let itemResponse = itemResponses[j];
@@ -61,8 +61,7 @@ function uploadAttachedFiles(){
             case providerInvoice:
             case providerPayment:
             case providerPaymentNoInvoice:
-                uploadProvider = true;
-                var providerFilesId = itemResponse.getResponse();
+                providerFilesIds.push(itemResponse.getResponse());
                 break;
             case selectFolderForProviderPayment1:
             case selectFolderForProviderPayment2:
@@ -70,8 +69,10 @@ function uploadAttachedFiles(){
                 break;
         }
     }
-    if (uploadProvider){
+    if (providerFilesIds.length){
         destinationFolderId = searchFolderId("Pagos", paymentType)
-        makeFilesCopy(providerFilesId, destinationFolderId);
+        for (let i = 0 ; i < providerFilesIds.length ; i++) {
+            makeFilesCopy(providerFilesIds[i], destinationFolderId);
+        }
     }
 }
