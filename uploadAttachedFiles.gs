@@ -10,6 +10,7 @@ const clientPaymentPrevInvoice = "COMPROBANTE COBRO A CLIENTES con factura previ
 const clientPayment = "COMPROBANTE COBRO A CLIENTES - Adjuntá la documentación relativa al pago del cliente (comprobante, retenciones, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 
 const pendingSalariesPayment = "COMPROBANTE PAGO SUELDOS/HONORARIOS - Adjuntá la documentación relativa al pago (comprobante, etc).\nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip)"
+
 const salariesUpload = "CARGA SUELDOS/HONORARIOS - Adjuntá la documentación asociada (Factura monotributista, Recibos de sueldos). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 const salariesPayment = "PAGO DE SUELDOS/HONORARIOS - Adjuntá la documentación relativa al pago (recibo de sueldo, factura monotributista, comprobante de pago, etc). \nEn caso de ser varios, se puede adjuntar un archivo comprimido (.zip) "
 
@@ -20,7 +21,8 @@ const pendingTaxesPayment = "PAGO IMPUESTOS - Adjuntá la documentación relativ
 const selectFolderForProviderPayment1 = "¿En qué carpeta de Pagos de Drive querés cargar la factura? "
 const selectFolderForProviderPayment2 = "¿En qué carpeta de Pagos de Drive querés cargar el pago? "
 
-
+const selectSubcatForSalaries1 = "Indicá la subcategoría de Honorarios a registrar"
+const selectSubcatForSalaries2 = "Seleccione los sueldos/honorarios que quiere marcar como pagos"
 
 function uploadAttachedFiles(){
     var form = FormApp.openById(formId);
@@ -30,6 +32,7 @@ function uploadAttachedFiles(){
     var itemResponses = formResponse.getItemResponses();
     var destinationFolderId = ""
     var providerFilesIds = []
+    var salariesFilesIds = []
 
     for (var j = 0; j < itemResponses.length; j++) {
         let itemResponse = itemResponses[j];
@@ -49,8 +52,7 @@ function uploadAttachedFiles(){
             case pendingSalariesPayment:
             case salariesUpload:
             case salariesPayment:
-                destinationFolderId = searchFolderId("Pagos", "Empleados")
-                makeFilesCopy(itemResponse.getResponse(), destinationFolderId);
+                salariesFilesIds.push(itemResponse.getResponse());
                 break;
             case taxesPayment:
             case taxesUpload:
@@ -67,6 +69,10 @@ function uploadAttachedFiles(){
             case selectFolderForProviderPayment2:
                 var paymentType = itemResponse.getResponse();
                 break;
+            case selectSubcatForSalaries1:
+            case selectSubcatForSalaries2:
+                var salaryType = getSalaryType(itemResponse.getResponse());
+                break;
         }
     }
     if (providerFilesIds.length){
@@ -75,4 +81,18 @@ function uploadAttachedFiles(){
             makeFilesCopy(providerFilesIds[i], destinationFolderId);
         }
     }
+
+    if (salariesFilesIds.length){
+        destinationFolderId = searchFolderId("Pagos", salaryType)
+        for (let i = 0 ; i < salariesFilesIds.length ; i++) {
+            makeFilesCopy(salariesFilesIds[i], destinationFolderId);
+        }
+    }
+}
+
+function getSalaryType(response){
+    if (response.includes("Actores")){
+        return "Actores";
+    }
+    return "Empleados"
 }
