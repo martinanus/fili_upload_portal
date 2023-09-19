@@ -54,6 +54,7 @@ function concatenateCols(rows){
         }
         strOption = strOption.substring(0, strOption.length - separator.length);
 
+        strOption = strOption.replace("euro_official -", "EU")
         strOption = strOption.replace("dollar_official -", "USD")
         strOption = strOption.replace("peso -", "$")
 
@@ -122,16 +123,30 @@ function formatDate(str) {
     return (day+"/"+month+"/"+year)
 }
 
-function getFiliUrlWithUtm(client){
+function getFiliUrlWithUtm(client, language){
     var userHashed = hash_str(bqDataset)
     var clientHashed = hash_str(client)
 
     var UrlWithUtm = filiWebSiteUrl+"?utm_source=fact&utm_medium=mail&utm_campaign="+userHashed
     UrlWithUtm += "&utm_content="+clientHashed
 
+    var enFili = "Sent with Fili";
+    var frFili = "Envoyé avec Fili";
+    var esFili = "Enviado con Fili";
+
+    var langMsg;
+    switch (language) {
+        case 'Inglés':
+            langMsg = enFili
+        case 'Francés':
+            langMsg = frFili
+        case 'Español':
+            langMsg = esFili
+    }
+
     console.log("UrlWithUtm: " + UrlWithUtm);
 
-    var htmlText = `<BR><a href=${UrlWithUtm}><font size="-2">Enviado con Fili</font></a>`
+    var htmlText = `<BR><a href=${UrlWithUtm}><font size="-2">${langMsg}</font></a>`
 
     return htmlText
 }
@@ -177,6 +192,28 @@ function getCounterpartEmail(counterpartName){
     return countepartEmail
 }
 
+
+function getCounterpartLanguage(counterpartName){
+    const query = 'SELECT language FROM '
+                + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
+                 +'WHERE counterpart = "' + counterpartName + '"';
+
+
+    var rows = runQuery(query)
+
+    var data = rowsToList(rows, "Inglés")
+
+    var language = data[0];
+
+    if(!language){
+        language = "Inglés"
+    }
+
+    Logger.log("Language is: " + language)
+
+    return language
+}
+
 function getAttachmentsFromFileIds(fileIds){
     blobList = [];
     for (var i = 0; i < fileIds.length; i++) {
@@ -187,73 +224,97 @@ function getAttachmentsFromFileIds(fileIds){
 }
 
 
-function getBankDataInformation(destination){
-    if(destination != "Client"){
-        return "";
+function getExternalPortalInformation(language){
+
+    var esExternalPortalInformation = "Le pedimos por favor que, en el futuro, cargue las facturas "
+                        + "en nuestro Portal de Carga que puede acceder "
+                        + `<a href=${externalPortalLink}>clickeando aquí</a>. <BR><BR>`
+
+    var enExternalPortalInformation = "For future invoices, please submit your invoices "
+                        + "in our Invoice Loading Portal you can access "
+                        + `<a href=${externalPortalLink}>clicking here</a>. <BR><BR>`
+
+    var frExternalPortalInformation = "Pour des futures factures, veuillez soummetre "
+                        + "vos factures dans notre portail de téléchargement en "
+                        + `<a href=${externalPortalLink}>cliquant ici</a>. <BR><BR>`
+
+
+    switch (language) {
+        case 'Inglés':
+            return enExternalPortalInformation
+        case 'Francés':
+            return frExternalPortalInformation
+        case 'Español':
+            return esExternalPortalInformation
     }
-    var paymentAnounce = "A continuación encontrará los datos para el pago de la factura: <BR>"
-    var bankDataInformation = "Banco     : " + userBank + "<BR>"
-                            + "Titular   : " + userBankAccountOwner + "<BR>"
-                            + "CBU/Alias : " + userCbuAlias + "<BR><BR>"
-    return paymentAnounce + bankDataInformation ;
 }
 
-function getExternalPortalInformation(destination){
-    if(destination != "Client"){
-        return "";
-    }
-    var externalPortalInformation = "Le pedimos por favor que, una vez paga la factura, cargue el comprobante de pago "
-                        + "en nuestro Portal de Carga que pueden acceder "
-                        + `<a href=${externalPortalLink}>clickeando aquí</a> `
-                        + "identificándose con el CUIT de su empresa. <BR><BR>"
-    return externalPortalInformation;
-}
+
+function getEmailBody(customMailContent, counterpartName, language){
 
 
-function getEmailBody(customMailContent, counterpartName, destination){
     let emoji_html = "&#128075;"
-    let documentType;
-    if (destination == "Client"){
-        documentType = "la factura generada "
-    } else {
-        documentType = "el comprobante del pago realizado "
-    }
-    let defaultBody = `Hola ${emoji_html}, <BR><BR>`
-                + `Le enviamos `
-                + documentType
-                + `por ` + userName + ` <BR><BR>`
-                + getBankDataInformation(destination)
-                + getExternalPortalInformation(destination)
-                + `¡Muchas gracias! <BR><BR>`
-                + `El equipo de ${userName}.`;
+    let enDefaultBody = `Hello ${emoji_html}, <BR><BR>`
+            + `Attached you will find the proof of the payment executed  `
+            + `by ` + userName + `. <BR><BR>`
+            + getExternalPortalInformation(language)
+            + `Thank you and have a nice day! <BR><BR>`
+            + `${userName}.`;
 
+    let frDefaultBody = `Bonjour ${emoji_html}, <BR><BR>`
+            + `Vous trouverez ci-joint la preuve du paiement réalisée `
+            + `par ` + userName + `. <BR><BR>`
+            + getExternalPortalInformation(language)
+            + `Merci beaucoup et bonne journée! <BR><BR>`
+            + `${userName}.`;
+
+    let esDefaultBody = `Hola ${emoji_html}, <BR><BR>`
+            + `Le enviamos `
+            + `el comprobante de pago generado `
+            + `por ` + userName + `. <BR><BR>`
+            + getExternalPortalInformation(language)
+            + `¡Muchas gracias! <BR><BR>`
+            + `El equipo de ${userName}.`;
 
     if (customMailContent){
-        customMailContent += getFiliUrlWithUtm(counterpartName);
+        customMailContent += getFiliUrlWithUtm(counterpartName, language);
         return customMailContent.replaceAll("\n", "<BR>");
     }
 
-    defaultBody += getFiliUrlWithUtm(counterpartName);
+    let filiUrlWithUtm = getFiliUrlWithUtm(counterpartName, language);
 
-    return defaultBody;
+    switch (language) {
+        case 'Inglés':
+            return enDefaultBody + filiUrlWithUtm
+        case 'Francés':
+            return frDefaultBody + filiUrlWithUtm
+        case 'Español':
+            return esDefaultBody + filiUrlWithUtm
+    }
 
 }
 
-function getSubject(userName, selectedCounterpart, destination){
-    var clientSubject     = `Factura ` + userName + ` - ` + selectedCounterpart;
-    var providerSubject   = `Comprobante de pago ` + userName + ` - ` + selectedCounterpart;
-    if (destination == "Client"){
-        return clientSubject;
-    } else {
-        return providerSubject;;
+function getSubject(userName, selectedCounterpart, language){
+
+    var enProviderSubject   = `Proof of payment ` + userName + ` - ` + selectedCounterpart;
+    var frProviderSubject   = `Preuve de paiement ` + userName + ` - ` + selectedCounterpart;
+    var esProviderSubject   = `Comprobante de pago ` + userName + ` - ` + selectedCounterpart;
+
+    switch (language) {
+        case 'Inglés':
+            return enProviderSubject
+        case 'Francés':
+            return frProviderSubject
+        case 'Español':
+            return esProviderSubject
     }
 }
 
 
-function sendEmailToCounterpart(selectedCounterpart, invoicesId, customMailContent, destination){
+function sendEmailToCounterpart(selectedCounterpart, language, invoicesId, customMailContent){
 
-    var subject         = getSubject(userName, selectedCounterpart, destination)
-    var body            = getEmailBody(customMailContent, selectedCounterpart, destination);
+    var subject         = getSubject(userName, selectedCounterpart, language)
+    var body            = getEmailBody(customMailContent, selectedCounterpart, language);
     var countepartEmail = getCounterpartEmail(selectedCounterpart);
     var attachment      = getAttachmentsFromFileIds(invoicesId);
 
@@ -264,7 +325,7 @@ function sendEmailToCounterpart(selectedCounterpart, invoicesId, customMailConte
       attachments : attachment,
     })
 
-    Logger.log("Se notificó al " + destination + " : " + selectedCounterpart);
+    Logger.log("Se notificó al " + selectedCounterpart);
 
 }
 

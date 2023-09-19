@@ -1,10 +1,7 @@
 const userName                         = "Lucio Laria"
 const userEmail                        = "soporte@somosfili.com, martuanus@gmail.com" // TODO - UPDATE IN PROD
 //const userEmail                        = ""
-const userBank                         = "Banco de Lucio Laria"         // TODO - UPDATE IN PROD
-const userBankAccountOwner             = "Lucio Laria SA"               // TODO - UPDATE IN PROD
-const userCbuAlias                     = "lucio.laria"                  // TODO - UPDATE IN PROD
-const externalPortalLink               = "https://docs.google.com/forms/d/e/1FAIpQLSc2Noh7ppru59QRjCFqTIlXIpUVSTZhYYQ6-JT0d_MECR0YaQ/viewform"
+const externalPortalLink               = "https://docs.google.com/forms/d/e/1FAIpQLScuTR2e9U0O1yF6Kj_CqFPAU0bkh1nLvTkYMLPjJXwzdQgKDw/viewform"
 
 const internalEmail                    = "soporte@somosfili.com"
 const filiWebSiteUrl                   = "www.somosfili.com"

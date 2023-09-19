@@ -7,7 +7,6 @@ const paymentWInvoiceAttachQuestionTitle = 'ENVÍO COMPROBANTE DE PAGO - Adjunt�
 const customProviderMailQuestionTitle   = "En caso de querer modificar el contenido del mail que se enviará a tu proveedor, escribí acá el nuevo texto a incluir. \nEl mensaje por defecto, si se deja vacía esta respuesta, se muestra acá."
 
 
-
 function sendReceiptMailToProvider(){
     var form = FormApp.openById(formId);
     var formResponses = form.getResponses();
@@ -27,16 +26,12 @@ function sendReceiptMailToProvider(){
             } else {
                 break;
             }
-        } else if (title == providerToSendQuestionTitle) {
-            var selectedProvider = itemResponse.getResponse();
-            Logger.log('Selected provider is : "%s"', selectedProvider)
         } else if (title == invoiceMatchQuestionTitle) {
             var invoiceMatch = itemResponse.getResponse();
             var selectedProvider = getProviderFromInvoice(invoiceMatch);
             Logger.log('Selected provider is : "%s"', selectedProvider)
         }
-        else if ((title == paymentNoInvoiceAttachQuestionTitle)
-                || (title == paymentWInvoiceAttachQuestionTitle)) {
+        else if (title == paymentWInvoiceAttachQuestionTitle) {
             var invoicesId = itemResponse.getResponse();
             Logger.log('Invoices to attach Id: "%s"', invoicesId)
         } else if (title == customProviderMailQuestionTitle){
@@ -50,8 +45,9 @@ function sendReceiptMailToProvider(){
     if (!sendEmail){
         return
     }
+    var providerLanguage = getCounterpartLanguage(selectedProvider);
 
-    sendEmailToCounterpart(selectedProvider, invoicesId, customMailContent, "Provider")
+    sendEmailToCounterpart(selectedProvider, providerLanguage, invoicesId, customMailContent)
 
 }
 
