@@ -151,29 +151,28 @@ function getProviders() {
 }
 
 function getProjects() {
-    // const query = 'SELECT counterpart FROM '
-    //              + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
-    //              +'WHERE (relation = "Proveedor") and (upload_source = "manual")'
-    //              + 'ORDER BY counterpart ASC';
+    const query = 'SELECT invoice_group_1 FROM '
+                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
+                 +'WHERE invoice_group_1 is not null '
+                 +'GROUP BY invoice_group_1';
 
-    // var rows = runQuery(query)
+    var rows = runQuery(query)
 
-    // var data = rowsToList(rows, "No hay Proveedores cargados")
-    data = ["unProyecto", "otroProyecto"]
+    var data = rowsToList(rows, "No hay Proveedores cargados")
+
 
     return data;
 }
 
 function getBusinessUnit() {
-    // const query = 'SELECT counterpart FROM '
-    //              + '`' + bqProjectId + '.' + bqDataset + '.' + bqCrmTableName + '`'
-    //              +'WHERE (relation = "Proveedor") and (upload_source = "manual")'
-    //              + 'ORDER BY counterpart ASC';
+    const query = 'SELECT invoice_group_2 FROM '
+                 + '`' + bqProjectId + '.' + bqDataset + '.' + bqInvoicePaymentsTableName + '`'
+                 +'WHERE invoice_group_2 is not null '
+                 +'GROUP BY invoice_group_2';
 
-    // var rows = runQuery(query)
+    var rows = runQuery(query)
 
-    // var data = rowsToList(rows, "No hay Proveedores cargados")
-    data = ["unaBU", "otraBU"]
+    var data = rowsToList(rows, "No hay Proveedores cargados")
 
     return data;
 }
